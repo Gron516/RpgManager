@@ -1,1 +1,1 @@
-﻿record class Person(string Email, string Password);
+﻿public record class Person(string Email, string Password);
