@@ -9,17 +9,11 @@ namespace AuthenticationService.Controllers;
 
 public class AuthController : Controller
 {
-    private List<Person> People { get; } =
-    [
-        new("tom@gmail.com", "12345"),
-        new("bob@gmail.com", "55555")
-    ];
-    
     [HttpPost("login")]
     public IResult Login([FromBody]Person loginData)
     {
         // находим пользователя 
-        var person = People.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
+        var person = FindinDb(new() { Email = loginData.Email, Password = loginData.Password });
         // если пользователь не найден, отправляем статусный код 401
         if(person is null) return Results.Unauthorized();
      
@@ -53,6 +47,28 @@ public class AuthController : Controller
         };
  
         return Results.Json(response);
+    }
+
+    public static void AddtoDb(Person person)
+    {
+        using (ApplicationContext db = new ApplicationContext())
+        {
+            db.Persons.Add(person);
+            db.SaveChanges();
+        }
+        
+    }
+    
+    public static Person FindinDb(Person person)
+    {
+
+        using (ApplicationContext db = new ApplicationContext())
+        {
+            Person wantedUseer = person;
+            var user = db.Persons.FirstOrDefault(p => p.Email == wantedUseer.Email && p.Password == wantedUseer.Password);
+            return user;
+        }
+        
     }
 
 }
