@@ -4,4 +4,5 @@ public interface IAuthService
 {
     public Person? FindPerson(Person loginData);
     public string? CreateToken(Person person);
+    public IResult AddPerson(Person loginData);
 }

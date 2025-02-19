@@ -43,7 +43,11 @@ public class AuthController : Controller
         return Results.Json(response);
     }
 
-
+    [HttpPost("SignUp")]
+    public IResult SignUp([FromBody]Person registrationData)
+    {
+        return _authService.AddPerson(registrationData);
+    }
 
 }
 
