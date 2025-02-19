@@ -33,6 +33,25 @@ public class AuthService : IAuthService
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
+
+    public IResult AddPerson(Person loginData)
+    {
+        var user = new Person
+        {
+            Email = loginData.Email
+        };
+        var person = FindLoginInDb(user);
+        // если пользователь не найден, отправляем статусный код 401
+        if(person is null) 
+        {
+            AddToDb(loginData);
+            return Results.Text("Login Successful");
+        }
+        else
+        {
+            return Results.BadRequest();
+        }
+    }
     
     private void AddToDb(Person person)
     {
@@ -42,4 +61,6 @@ public class AuthService : IAuthService
     
     private Person? FindInDb(Person person) => 
         _context.Persons.FirstOrDefault(p => p.Email == person.Email && p.Password == person.Password);
+    private Person? FindLoginInDb(Person person) => 
+        _context.Persons.FirstOrDefault(p => p.Email == person.Email);
 }

@@ -24,6 +24,10 @@
 <p>
     <input type="submit" id="getData" value="Получить данные" />
 </p>
+
+<p>
+    <input type="submit" id="SignUp" value="Регистрация" />
+</p>
 <script>
     var tokenKey = "accessToken";
     // при нажатии на кнопку отправки формы идет запрос к /login для получения токена
@@ -83,6 +87,28 @@
         document.getElementById("userInfo").style.display = "none";
         document.getElementById("loginForm").style.display = "block";
         sessionStorage.removeItem(tokenKey);
+    });
+
+    document.getElementById("SignUp").addEventListener("click", async e => {
+        e.preventDefault();
+        // отправляет запрос и получаем ответ
+        const response = await fetch("/SignUp", {
+            method: "POST",
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            })
+        });
+        // если запрос прошел нормально
+        if (response.ok === true) {
+            // изменяем содержимое и видимость блоков на странице
+            document.getElementById("userName").innerText = "block";
+            document.getElementById("userInfo").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+        }
+        else  // если произошла ошибка, получаем код статуса
+            console.log("Status: ", response.status);
     });
 </script>
 </body>
