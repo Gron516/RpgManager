@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AuthenticationService.Configurations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AuthenticationService.Service;
@@ -36,24 +37,15 @@ public class AuthService : IAuthService
         return encodedJwt;
     }
 
-    public IResult AddPerson(Person loginData)
+    public IResult AddPerson(Person registrationData)
     {
-        var user = new Person
+        if(CheckIfUserExists(registrationData.Email))
         {
-            Email = loginData.Email
-        };
-        var person = FindLoginInDb(user);
-
-        if(person is null) 
-        {
-            AddToDb(loginData);
-            return Results.Text("Login Successful");
+            // если пользователь найден, отправляем статусный код 400
+            return Results.BadRequest("Такой пользователь уже существует");
         }
-        // если пользователь найден, отправляем статусный код 400
-        else
-        {
-            return Results.BadRequest();
-        }
+        AddToDb(registrationData);
+        return Results.Ok("Login Successful");
     }
     
     private void AddToDb(Person person)
@@ -65,11 +57,10 @@ public class AuthService : IAuthService
     
     private Person? FindInDb(Person person) => 
         _context.Persons.FirstOrDefault(p => p.Email == person.Email && p.Password == person.Password);
-    private Person? FindLoginInDb(Person person) => 
-        _context.Persons.FirstOrDefault(p => p.Email == person.Email);
-    public static string GetHash(string input)
-    {
-        using SHA256 hash = SHA256.Create();
-        return Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(input)));
-    }
+    
+    private bool CheckIfUserExists(string? login) => 
+        _context.Persons.Any(p => p.Email == login);
+    
+    private string GetHash(string input) => 
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(input)));
 }

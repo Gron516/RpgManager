@@ -44,9 +44,9 @@ public class AuthController : Controller
     }
 
     [HttpPost("SignUp")]
-    public IResult SignUp([FromBody]Person loginData)
+    public IResult SignUp([FromBody]Person registrationData)
     {
-        return _authService.AddPerson(loginData);
+        return _authService.AddPerson(registrationData);
     }
 
 }
