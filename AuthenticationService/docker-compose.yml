@@ -1,0 +1,39 @@
+services:
+  authenticationservice:
+    image: ${DOCKER_REGISTRY-}authenticationservice
+    build:
+      context: .
+      dockerfile: AuthenticationService/Dockerfile
+    ports:
+      - "5050:5050"
+      - "5051:5051"
+
+  postgresdb:
+    image: postgres:latest
+    container_name: postgresdb
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rollD20
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+
+  pgadmin4:
+    image: elestio/pgadmin:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@email.com
+      PGADMIN_DEFAULT_PASSWORD: your-password
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgresdb
+    volumes:
+      - pgadmin-data:/pgadmin4/servers.json
+volumes:
+  local_pgdata:
+  pgadmin-data:
