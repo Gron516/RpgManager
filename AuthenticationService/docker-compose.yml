@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: AuthenticationService/Dockerfile
     ports:
-      - "5050:5050"
-      - "5051:5051"
+      - "5050:8080"
+      - "5051:443"
 
   postgresdb:
     image: postgres:latest
