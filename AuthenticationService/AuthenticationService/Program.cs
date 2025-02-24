@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
 builder.Services.AddAuthorization();
@@ -41,6 +43,8 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseRouting();
 
