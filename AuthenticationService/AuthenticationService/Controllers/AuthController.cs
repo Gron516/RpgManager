@@ -25,7 +25,7 @@ public class AuthController : Controller
         var response = new
         {
             access_token =  _authService.CreateToken(person),
-            username = person.Email,
+            username = person.Email
         };
  
         return Results.Json(response);

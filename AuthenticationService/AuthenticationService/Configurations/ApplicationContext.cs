@@ -18,6 +18,6 @@ public class ApplicationContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("myDb1"));
+        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("AuthenticationServiceDb"));
     }
 }

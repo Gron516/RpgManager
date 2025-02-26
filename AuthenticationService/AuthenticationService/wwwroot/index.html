@@ -115,7 +115,7 @@
         e.preventDefault();
         // получаем токен из sessionStorage
         const token = sessionStorage.getItem(tokenKey);
-        // отправляем запрос к "/dataPlayer
+        // отправляем запрос к "/dataAdmin
         const response = await fetch("/dataAdmin", {
             method: "GET",
             headers: {
