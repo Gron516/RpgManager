@@ -26,6 +26,13 @@
 </p>
 
 <p>
+    <input type="submit" id="getDataPlayer" value="Получить данные Player" />
+</p>
+<p>
+    <input type="submit" id="getDataAdmin" value="Получить данные Admin" />
+</p>
+
+<p>
     <input type="submit" id="SignUp" value="Регистрация" />
 </p>
 <script>
@@ -69,7 +76,55 @@
                 "Accept": "application/json",
                 "Authorization": "Bearer " + token  // передача токена в заголовке
             }
+
         });
+        
+
+        if (response.ok === true) {
+            const data = await response.json();
+            alert(data.message);
+        }
+        else
+            console.log("Status: ", response.status);
+    });
+
+    document.getElementById("getDataPlayer").addEventListener("click", async e => {
+        e.preventDefault();
+        // получаем токен из sessionStorage
+        const token = sessionStorage.getItem(tokenKey);
+        // отправляем запрос к "/dataPlayer
+        const response = await fetch("/dataPlayer", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token  // передача токена в заголовке
+            }
+
+        });
+
+
+        if (response.ok === true) {
+            const data = await response.json();
+            alert(data.message);
+        }
+        else
+            console.log("Status: ", response.status);
+    });
+
+    document.getElementById("getDataAdmin").addEventListener("click", async e => {
+        e.preventDefault();
+        // получаем токен из sessionStorage
+        const token = sessionStorage.getItem(tokenKey);
+        // отправляем запрос к "/dataPlayer
+        const response = await fetch("/dataAdmin", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token  // передача токена в заголовке
+            }
+
+        });
+
 
         if (response.ok === true) {
             const data = await response.json();

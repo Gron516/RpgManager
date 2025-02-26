@@ -25,7 +25,12 @@ public class AuthService : IAuthService
     
     public string? CreateToken(Person person)
     {
-    var claims = new List<Claim> {new Claim(ClaimTypes.Name, person.Email) };
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimsIdentity.DefaultNameClaimType, person.Email),
+            new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role)
+        };
+
         // создаем JWT-токен
         var jwt = new JwtSecurityToken(
             issuer: AuthOptions.ISSUER,
@@ -51,6 +56,7 @@ public class AuthService : IAuthService
     private void AddToDb(Person person)
     {
         person.Password = GetHash(person.Password);
+        person.Role = "Player";
         _context.Persons.Add(person);
         _context.SaveChanges();
     }
