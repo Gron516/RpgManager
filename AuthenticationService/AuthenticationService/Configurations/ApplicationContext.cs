@@ -8,8 +8,16 @@ public class ApplicationContext : DbContext
     {
         Database.EnsureCreated();
     }
+    
+    private readonly IConfiguration _configuration;
+
+    public ApplicationContext(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=postgresdb;Port=5432;Database=postgres;Username=postgres;Password=rollD20");
+        
+        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("AuthenticationServiceDb"));
     }
 }

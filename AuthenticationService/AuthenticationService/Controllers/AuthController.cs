@@ -48,6 +48,29 @@ public class AuthController : Controller
     {
         return _authService.AddPerson(registrationData);
     }
+    
+    [Authorize(Roles = "Player")]
+    [HttpGet("dataPlayer")]
+    public IResult DataPlayer()
+    {
+        var response = new
+        {
+            message = "Hello Player!"
+        };
+ 
+        return Results.Json(response);
+    }
 
+    [Authorize(Roles = "Admin")]
+    [HttpGet("dataAdmin")]
+    public IResult DataAdmin()
+    {
+        var response = new
+        {
+            message = "Hello Admin!"
+        };
+ 
+        return Results.Json(response);
+    }
 }
 
