@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AuthenticationService.Configurations;
 using AuthenticationService.Controllers;
+using AuthenticationService.Repositories;
 using AuthenticationService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IGroupsService, GroupsService>();
+
+builder.Services.AddTransient<IGroupsRepository, GroupsRepository>();
+
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
