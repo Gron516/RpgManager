@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AuthenticationService.Models;
+using Microsoft.EntityFrameworkCore;
  
 public class ApplicationContext : DbContext
 {
     public DbSet<Person> Persons { get; set; } = null!;
+    public DbSet<Group> Groups { get; set; } = null!;
  
     public ApplicationContext()
     {

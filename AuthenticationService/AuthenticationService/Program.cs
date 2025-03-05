@@ -14,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IGroupService, GroupService>();
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
