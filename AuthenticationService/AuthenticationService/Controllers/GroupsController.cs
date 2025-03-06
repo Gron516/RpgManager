@@ -48,7 +48,7 @@ public class GroupsController : Controller
     
     //[Authorize(Roles = "Player")]
     [HttpGet("{id}")]
-    public async Task<IResult> GetGroup([FromRoute] int id)
+    public async Task<IResult> GetGroup([FromRoute] Guid id)
     {
         try
         {
@@ -78,7 +78,7 @@ public class GroupsController : Controller
     
     //[Authorize(Roles = "Player")]
     [HttpDelete("{id}")]
-    public async Task<IResult> DeleteGroup([FromRoute] int id)
+    public async Task<IResult> DeleteGroup([FromRoute] Guid id)
     {
         try
         {

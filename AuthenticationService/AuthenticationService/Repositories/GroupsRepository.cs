@@ -18,7 +18,7 @@ public class GroupsRepository : IGroupsRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Group?> Get(int id) => 
+    public async Task<Group?> Get(Guid id) => 
         await _context.Groups.FirstOrDefaultAsync(g => g.Id == id);
 
     public async Task Change(Group newGroup, Group oldGroup)

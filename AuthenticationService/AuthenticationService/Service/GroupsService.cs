@@ -27,7 +27,7 @@ public class GroupsService : IGroupsService
         return true;
     }
 
-    public async Task DeleteGroup(int id)
+    public async Task DeleteGroup(Guid id)
     {
         var foundGroup = await _groupsRepository.Get(id);
         if (foundGroup == null)
@@ -36,7 +36,7 @@ public class GroupsService : IGroupsService
         await _groupsRepository.Delete(foundGroup);
     }
     
-    public async Task<Group?> GetGroup(int id) => 
+    public async Task<Group?> GetGroup(Guid id) => 
         await _groupsRepository.Get(id);
     
     public async Task<Group[]?> GetAllGroups() => 
