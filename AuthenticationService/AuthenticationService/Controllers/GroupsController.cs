@@ -18,11 +18,11 @@ public class GroupsController : Controller
     
     //[Authorize(Roles = "Player")]
     [HttpPost]
-    public async Task<IResult> AddGroup([FromBody] Group newGroup)
+    public async Task<IResult> AddGroup([FromBody] GroupModel newGroupModel)
     {
         try
         {
-            await _groupsService.AddGroup(newGroup);
+            await _groupsService.AddGroup(newGroupModel);
         }
         catch (Exception e)
         {
@@ -63,12 +63,12 @@ public class GroupsController : Controller
 
     //[Authorize(Roles = "Player")]
     [HttpPut]
-    public async Task<IResult> ChangeGroup([FromBody] Group newGroup)
+    public async Task<IResult> ChangeGroup([FromBody] GroupModel newGroupModel, Guid id)
     {
         try
         {
-            var result = await _groupsService.ChangeGroup(newGroup);
-            return result ? Results.Ok("Group Change") : Results.NotFound(newGroup.Id);
+            var result = await _groupsService.ChangeGroup(newGroupModel,id);
+            return result ? Results.Ok("Group Change") : Results.NotFound(id);
         }
         catch (Exception e)
         {

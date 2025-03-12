@@ -3,24 +3,29 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AuthenticationService.Configurations;
+using AuthenticationService.Models;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
 
 namespace AuthenticationService.Service;
 
 public class AuthService : IAuthService
 {
     private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
 
-    public AuthService(ApplicationContext context)
+    public AuthService(ApplicationContext context,IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
     
-    public Person? FindPerson(Person loginData)
+    public Person? FindPerson(PersonModel loginDataModel)
     {
         // находим пользователя 
-        return FindInDb(new() { Email = loginData.Email, Password = GetHash(loginData.Password) });
+        return FindInDb(ConvertModel(loginDataModel));
     }
     
     public string? CreateToken(Person person)
@@ -42,31 +47,32 @@ public class AuthService : IAuthService
         return encodedJwt;
     }
 
-    public IResult AddPerson(Person registrationData)
+    public IResult AddPerson(PersonModel registrationData)
     {
         if(CheckIfUserExists(registrationData.Email))
         {
             // если пользователь найден, отправляем статусный код 400
             return Results.BadRequest("Такой пользователь уже существует");
         }
-        AddToDb(registrationData);
+        AddToDb(ConvertModel(registrationData));
         return Results.Ok("Login Successful");
     }
     
     private void AddToDb(Person person)
     {
-        person.Password = GetHash(person.Password);
-        person.Role = "Player";
         _context.Persons.Add(person);
         _context.SaveChanges();
     }
     
-    private Person? FindInDb(Person person) => 
+    private Person? FindInDb(Person? person) => 
         _context.Persons.FirstOrDefault(p => p.Email == person.Email && p.Password == person.Password);
     
     private bool CheckIfUserExists(string? login) => 
         _context.Persons.Any(p => p.Email == login);
-    
-    private string GetHash(string input) => 
-        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(input)));
+
+    private Person? ConvertModel(PersonModel model)
+    {
+        model.Role = "Player";
+        return _mapper.Map<Person>(model);
+    }
 }

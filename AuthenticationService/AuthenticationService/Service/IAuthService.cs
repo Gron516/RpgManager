@@ -1,8 +1,10 @@
-﻿namespace AuthenticationService.Service;
+﻿using AuthenticationService.Models;
+
+namespace AuthenticationService.Service;
 
 public interface IAuthService
 {
-    public Person? FindPerson(Person loginData);
+    public Person? FindPerson(PersonModel loginData);
     public string? CreateToken(Person person);
-    public IResult AddPerson(Person loginData);
+    public IResult AddPerson(PersonModel loginData);
 }
