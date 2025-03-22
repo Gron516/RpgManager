@@ -1,4 +1,5 @@
-﻿using AuthenticationService.Service;
+﻿using AuthenticationService.Models;
+using AuthenticationService.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ public class AuthController : Controller
     }
     
     [HttpPost("login")]
-    public IResult Login([FromBody]Person loginData)
+    public IResult Login([FromBody]PersonModel loginData)
     {
 
         var person = _authService.FindPerson(loginData);
@@ -44,7 +45,7 @@ public class AuthController : Controller
     }
 
     [HttpPost("SignUp")]
-    public IResult SignUp([FromBody]Person registrationData)
+    public IResult SignUp([FromBody]PersonModel registrationData)
     {
         return _authService.AddPerson(registrationData);
     }

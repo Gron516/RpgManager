@@ -4,6 +4,7 @@ using AuthenticationService.Configurations;
 using AuthenticationService.Controllers;
 using AuthenticationService.Repositories;
 using AuthenticationService.Service;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -16,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IGroupsService, GroupsService>();
-
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddTransient<IGroupsRepository, GroupsRepository>();
 
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
