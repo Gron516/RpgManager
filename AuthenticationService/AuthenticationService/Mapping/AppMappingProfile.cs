@@ -13,5 +13,6 @@ public class AppMappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<GroupModel, Group>();
+        CreateMap<PersonGroupModel, PersonGroup>();
     }
 }
