@@ -1,15 +1,16 @@
-﻿using AuthenticationService.Models;
+﻿using AuthenticationService.Entities;
+using AuthenticationService.Models;
 
 namespace AuthenticationService.Repositories;
 
 public interface IPersonsGroupsRepository
 {
-    Task AddConnection(PersonGroup personGroup);
-    Task<PersonGroup?[]> GetAllPersonGroupByGroupId(Guid groupId);
-    Task<PersonGroup?[]> GetAllPersonGroupByPersonId(Guid personId);
-    Task<PersonGroup?> GetPersonGroup(Guid personId, Guid groupId);
-    Task<Person?[]> GetAllPersonByGroupId(Guid groupId);
-    Task<Group?[]> GetAllGroupByPersonId(Guid personId);
-    Task Change(PersonGroup oldPersonGroup, PersonGroup newPersonGroup);
-    Task DeleteConnection(PersonGroup personGroup);
+    Task AddConnection(PersonGroupEntity personGroup);
+    Task<PersonGroupEntity?[]> GetAllPersonGroupByGroupId(Guid groupId);
+    Task<PersonGroupEntity?[]> GetAllPersonGroupByPersonId(Guid personId);
+    Task<PersonGroupEntity?> GetPersonGroup(Guid personId, Guid groupId);
+    Task<PersonEntity?[]> GetAllPersonByGroupId(Guid groupId);
+    Task<GroupEntity?[]> GetAllGroupByPersonId(Guid personId);
+    Task Change(PersonGroupEntity oldPersonGroup, PersonGroupEntity newPersonGroup);
+    Task DeleteConnection(PersonGroupEntity personGroup);
 }

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AuthenticationService.Configurations;
+using AuthenticationService.Entities;
 using AuthenticationService.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,13 @@ public class AuthService : IAuthService
         _mapper = mapper;
     }
     
-    public Person? FindPerson(PersonModel loginDataModel)
+    public PersonEntity? FindPerson(PersonModel loginDataModel)
     {
         // находим пользователя 
         return FindInDb(ConvertModel(loginDataModel));
     }
     
-    public string? CreateToken(Person person)
+    public string? CreateToken(PersonEntity person)
     {
         var claims = new List<Claim>
         {
@@ -58,21 +59,21 @@ public class AuthService : IAuthService
         return Results.Ok("Login Successful");
     }
     
-    private void AddToDb(Person person)
+    private void AddToDb(PersonEntity person)
     {
         _context.Persons.Add(person);
         _context.SaveChanges();
     }
     
-    private Person? FindInDb(Person? person) => 
+    private PersonEntity? FindInDb(PersonEntity? person) => 
         _context.Persons.FirstOrDefault(p => p.Email == person.Email && p.Password == person.Password);
     
     private bool CheckIfUserExists(string? login) => 
         _context.Persons.Any(p => p.Email == login);
 
-    private Person? ConvertModel(PersonModel model)
+    private PersonEntity? ConvertModel(PersonModel model)
     {
         model.Role = "Player";
-        return _mapper.Map<Person>(model);
+        return _mapper.Map<PersonEntity>(model);
     }
 }
