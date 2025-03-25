@@ -21,8 +21,8 @@ builder.Services.AddTransient<IGroupsService, GroupsService>();
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddTransient<IGroupsRepository, GroupsRepository>();
 
-builder.Services.AddTransient<IPersonsGroupsRepository, PersonsGroupsRepository>();
-builder.Services.AddTransient<IPersonsGroupsService, PersonsGroupsService>();
+builder.Services.AddTransient<IPersonGroupsRepository, PersonGroupsRepository>();
+builder.Services.AddTransient<IPersonGroupsService, PersonGroupsService>();
 
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
 builder.Services.AddAuthorization();

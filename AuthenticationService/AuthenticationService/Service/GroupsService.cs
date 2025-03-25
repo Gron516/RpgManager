@@ -40,11 +40,18 @@ public class GroupsService : IGroupsService
         await _groupsRepository.Delete(foundGroup);
     }
     
-    public async Task<GroupEntity?> GetGroup(Guid id) => 
-        await _groupsRepository.Get(id);
+    public async Task<GroupModel?> GetGroup(Guid id) => 
+        ConvertEntity(await _groupsRepository.Get(id));
     
-    public async Task<GroupEntity[]?> GetAllGroups() => 
-        await _groupsRepository.GetAll();
+    public async Task<GroupModel[]?> GetAllGroups() => 
+        ConvertEntities(await _groupsRepository.GetAll());
+    
     private GroupEntity ConvertModel(GroupModel model) => 
         _mapper.Map<GroupEntity>(model);
+    
+    private GroupModel? ConvertEntity(GroupEntity? entity) => 
+        _mapper.Map<GroupModel?>(entity);
+    
+    private GroupModel[]? ConvertEntities(GroupEntity[]? entities) => 
+        _mapper.Map<GroupModel[]?>(entities);
 }

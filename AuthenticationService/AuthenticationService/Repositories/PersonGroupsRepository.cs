@@ -4,23 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthenticationService.Repositories;
 
-public class PersonsGroupsRepository : IPersonsGroupsRepository
+public class PersonGroupsRepository : IPersonGroupsRepository
 {
     private readonly ApplicationContext _context;
     
-    public PersonsGroupsRepository(ApplicationContext context)
+    public PersonGroupsRepository(ApplicationContext context)
     {
         _context = context;
     }
     
-    public async Task AddConnection(PersonGroupEntity personGroup)
+    public async Task Add(PersonGroupEntity personGroup)
     {
         personGroup.JoinedAt = DateTime.UtcNow;
         await _context.PersonGroups.AddAsync(personGroup);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<PersonGroupEntity?[]> GetAllPersonGroupByGroupId(Guid groupId) => 
+    public async Task<PersonGroupEntity?[]> GetAllByGroupId(Guid groupId) => 
         await _context.PersonGroups.Where(g => g.GroupId == groupId).ToArrayAsync();
     
     public async Task<PersonGroupEntity?[]> GetAllPersonGroupByPersonId(Guid personId) => 

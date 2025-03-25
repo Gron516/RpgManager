@@ -3,10 +3,10 @@ using AuthenticationService.Models;
 
 namespace AuthenticationService.Repositories;
 
-public interface IPersonsGroupsRepository
+public interface IPersonGroupsRepository
 {
-    Task AddConnection(PersonGroupEntity personGroup);
-    Task<PersonGroupEntity?[]> GetAllPersonGroupByGroupId(Guid groupId);
+    Task Add(PersonGroupEntity personGroup);
+    Task<PersonGroupEntity?[]> GetAllByGroupId(Guid groupId);
     Task<PersonGroupEntity?[]> GetAllPersonGroupByPersonId(Guid personId);
     Task<PersonGroupEntity?> GetPersonGroup(Guid personId, Guid groupId);
     Task<PersonEntity?[]> GetAllPersonByGroupId(Guid groupId);

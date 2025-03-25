@@ -4,25 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationService.Controllers;
 
-[Route("persons-groups")] 
+[Route("person-groups")] 
 [ApiController]
 
-public class PersonsGroupsController : Controller
+public class PersonGroupsController : Controller
 {
-    private readonly IPersonsGroupsService _personsGroupsService;
+    private readonly IPersonGroupsService _personGroupsService;
     
-    public PersonsGroupsController(IPersonsGroupsService personGroupsService)
+    public PersonGroupsController(IPersonGroupsService personGroupsService)
     {
-        _personsGroupsService = personGroupsService;
+        _personGroupsService = personGroupsService;
     }
     
     //[Authorize(Roles = "Player")]
     [HttpPost]
-    public async Task<IResult> AddConnection([FromBody] PersonGroupModel newPersonGroupModel)
+    public async Task<IResult> AddPersonToGroup([FromBody] PersonGroupModel newPersonGroupModel)
     {
         try
         {
-            await _personsGroupsService.AddConnection(newPersonGroupModel);
+            await _personGroupsService.AddPersonToGroup(newPersonGroupModel);
         }
         catch (Exception e)
         {
@@ -32,13 +32,13 @@ public class PersonsGroupsController : Controller
     }
 
     //[Authorize(Roles = "Player")]
-    [HttpGet("person-groups/persons/{groupId}")]
-    public async Task<IResult> GetAllPersonGroupByGroupId(Guid groupId)
+    [HttpGet("/by-group-id/{groupId}")]
+    public async Task<IResult> GetAllByGroupId(Guid groupId)
     {
         try
         {
-            var result = await _personsGroupsService.GetAllPersonGroupByGroupId(groupId);
-            return Results.Json(result) ;
+            var result = await _personGroupsService.GetAllByGroupId(groupId);
+            return result != null ? Results.Json(result) : Results.NotFound(groupId);
         }
         catch (Exception e)
         {
@@ -52,7 +52,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            var result = await _personsGroupsService.GetAllPersonGroupByPersonId(personId);
+            var result = await _personGroupsService.GetAllPersonGroupByPersonId(personId);
             return Results.Json(result) ;
         }
         catch (Exception e)
@@ -67,7 +67,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            var result = await _personsGroupsService.GetAllGroupByPersonId(personId);
+            var result = await _personGroupsService.GetAllGroupByPersonId(personId);
             return result != null ? Results.Json(result) : Results.NotFound(personId);
         }
         catch (Exception e)
@@ -82,7 +82,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            var result = await _personsGroupsService.GetAllPersonByGroupId(groupId);
+            var result = await _personGroupsService.GetAllPersonByGroupId(groupId);
             return result != null ? Results.Json(result) : Results.NotFound(groupId);
         }
         catch (Exception e)
@@ -96,7 +96,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            var result = await _personsGroupsService.GetPersonGroup(personId, groupId);
+            var result = await _personGroupsService.GetPersonGroup(personId, groupId);
             return result != null ? Results.Json(result) : Results.NotFound(personId + "and" + groupId );
         }
         catch (Exception e)
@@ -111,7 +111,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            var result = await _personsGroupsService.ChangePersonGroup(newPersonGroupModel,personId, groupId);
+            var result = await _personGroupsService.ChangePersonGroup(newPersonGroupModel,personId, groupId);
             return result ? Results.Ok("Group Change") : Results.NotFound(personId + "and" + groupId );
         }
         catch (Exception e)
@@ -126,7 +126,7 @@ public class PersonsGroupsController : Controller
     {
         try
         {
-            await _personsGroupsService.DeleteConnection(personId, groupId);
+            await _personGroupsService.DeleteConnection(personId, groupId);
         }
         catch (Exception e)
         {

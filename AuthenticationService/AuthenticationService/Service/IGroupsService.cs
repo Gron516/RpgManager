@@ -8,6 +8,6 @@ public interface IGroupsService
     public Task AddGroup(GroupModel groupModel);
     public Task<bool> ChangeGroup(GroupModel groupModel,Guid id);
     public Task DeleteGroup(Guid id);
-    Task<GroupEntity?> GetGroup(Guid id);
-    Task<GroupEntity[]?> GetAllGroups();
+    Task<GroupModel?> GetGroup(Guid id);
+    Task<GroupModel[]?> GetAllGroups();
 }
