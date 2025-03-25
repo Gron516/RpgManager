@@ -7,6 +7,7 @@ using AuthenticationService.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,9 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IGroupsService, GroupsService>();
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 builder.Services.AddTransient<IGroupsRepository, GroupsRepository>();
+
+builder.Services.AddTransient<IPersonsGroupsRepository, PersonsGroupsRepository>();
+builder.Services.AddTransient<IPersonsGroupsService, PersonsGroupsService>();
 
 builder.Services.AddTransient<ApplicationContext, ApplicationContext>();
 builder.Services.AddAuthorization();
@@ -45,6 +49,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+    dbContext.Database.Migrate(); // Накатывает миграции
+}
+
 
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
