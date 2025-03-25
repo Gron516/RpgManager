@@ -1,4 +1,4 @@
-﻿using AuthenticationService.Models;
+﻿namespace AuthenticationService.Models;
 
 public class Group
 {
@@ -6,6 +6,4 @@ public class Group
     public string Name { get; set; }
     public string? System { get; set; }
     public string? Description { get; set; }
-    public string? Image { get; set; }
-    public ICollection<PersonGroup> PersonGroups { get; set; } = new List<PersonGroup>();
 }
