@@ -38,7 +38,7 @@ public class GroupsController : Controller
         try
         {
             var result = await _groupsService.GetAllGroups();
-            return Results.Json(result);
+            return Results.Json(result) ;
         }
         catch (Exception e)
         {
