@@ -1,4 +1,5 @@
-﻿using AuthenticationService.Models;
+﻿using AuthenticationService.Entities;
+using AuthenticationService.Models;
 using AuthenticationService.Repositories;
 using AutoMapper;
 
@@ -39,11 +40,18 @@ public class GroupsService : IGroupsService
         await _groupsRepository.Delete(foundGroup);
     }
     
-    public async Task<Group?> GetGroup(Guid id) => 
-        await _groupsRepository.Get(id);
+    public async Task<GroupModel?> GetGroup(Guid id) => 
+        ConvertEntity(await _groupsRepository.Get(id));
     
-    public async Task<Group[]?> GetAllGroups() => 
-        await _groupsRepository.GetAll();
-    private Group ConvertModel(GroupModel model) => 
-        _mapper.Map<Group>(model);
+    public async Task<GroupModel[]?> GetAllGroups() => 
+        ConvertEntities(await _groupsRepository.GetAll());
+    
+    private GroupEntity ConvertModel(GroupModel model) => 
+        _mapper.Map<GroupEntity>(model);
+    
+    private GroupModel? ConvertEntity(GroupEntity? entity) => 
+        _mapper.Map<GroupModel?>(entity);
+    
+    private GroupModel[]? ConvertEntities(GroupEntity[]? entities) => 
+        _mapper.Map<GroupModel[]?>(entities);
 }

@@ -1,4 +1,5 @@
-﻿using AuthenticationService.Helpers;
+﻿using AuthenticationService.Entities;
+using AuthenticationService.Helpers;
 using AuthenticationService.Models;
 using AutoMapper;
 
@@ -8,10 +9,13 @@ public class AppMappingProfile : Profile
 {
     public AppMappingProfile()
     {
-        CreateMap<PersonModel, Person>()
+        CreateMap<PersonModel, PersonEntity>()
             .ForMember(dest => dest.Password, opt => opt.MapFrom(src => HashHelper.GetHash(src.Password)))
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         
-        CreateMap<GroupModel, Group>();
+        CreateMap<GroupModel, GroupEntity>();
+        CreateMap<PersonGroupModel, PersonGroupEntity>();
+        CreateMap<GroupEntity?, GroupModel?>();
+        CreateMap<PersonGroupEntity?, PersonGroupModel?>();
     }
 }
