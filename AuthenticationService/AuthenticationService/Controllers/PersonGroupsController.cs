@@ -32,13 +32,13 @@ public class PersonGroupsController : Controller
     }
 
     //[Authorize(Roles = "Player")]
-    [HttpGet("/by-group-id/{groupId}")]
+    [HttpGet("by-group-id/{groupId}")]
     public async Task<IResult> GetAllByGroupId(Guid groupId)
     {
         try
         {
             var result = await _personGroupsService.GetAllByGroupId(groupId);
-            return result != null ? Results.Json(result) : Results.NotFound(groupId);
+            return result.Length != 0 ? Results.Json(result) : Results.NotFound(groupId);
         }
         catch (Exception e)
         {
@@ -47,13 +47,13 @@ public class PersonGroupsController : Controller
     }
     
     //[Authorize(Roles = "Player")]
-    [HttpGet("person-groups/groups/{personId}")]
-    public async Task<IResult> GetAllPersonGroupByPersonId(Guid personId)
+    [HttpGet("by-person-id/{personId}")]
+    public async Task<IResult> GetAllByPersonId(Guid personId)
     {
         try
         {
-            var result = await _personGroupsService.GetAllPersonGroupByPersonId(personId);
-            return Results.Json(result) ;
+            var result = await _personGroupsService.GetAllByPersonId(personId);
+            return result.Length != 0 ? Results.Json(result) : Results.NotFound(personId);
         }
         catch (Exception e)
         {
@@ -62,13 +62,13 @@ public class PersonGroupsController : Controller
     }
     
     //[Authorize(Roles = "Player")]
-    [HttpGet("person-groups/by-person-id/{personId}")]
-    public async Task<IResult> GetAllGroupByPersonId([FromRoute] Guid personId)
+    [HttpGet("groups/by-person-id/{personId}")]
+    public async Task<IResult> GetAllGroupsByPersonId([FromRoute] Guid personId)
     {
         try
         {
-            var result = await _personGroupsService.GetAllGroupByPersonId(personId);
-            return result != null ? Results.Json(result) : Results.NotFound(personId);
+            var result = await _personGroupsService.GetAllGroupsByPersonId(personId);
+            return result.Length != 0 ? Results.Json(result) : Results.NotFound(personId);
         }
         catch (Exception e)
         {
@@ -77,13 +77,13 @@ public class PersonGroupsController : Controller
     }
     
     //[Authorize(Roles = "Player")]
-    [HttpGet("person-groups/by-group-id/{groupId}")]
-    public async Task<IResult> GetAllPersonByGroupId([FromRoute] Guid groupId)
+    [HttpGet("persons/by-group-id/{groupId}")]
+    public async Task<IResult> GetAllPersonsByGroupId([FromRoute] Guid groupId)
     {
         try
         {
-            var result = await _personGroupsService.GetAllPersonByGroupId(groupId);
-            return result != null ? Results.Json(result) : Results.NotFound(groupId);
+            var result = await _personGroupsService.GetAllPersonsByGroupId(groupId);
+            return result.Length != 0 ? Results.Json(result) : Results.NotFound(groupId);
         }
         catch (Exception e)
         {
@@ -91,8 +91,8 @@ public class PersonGroupsController : Controller
         }
     }
     
-    [HttpGet("person-groups/by-both-id/{personId}/{groupId}")]
-    public async Task<IResult> GetPersonGroup([FromRoute] Guid personId, [FromRoute] Guid groupId)
+    [HttpGet]
+    public async Task<IResult> GetPersonGroup([FromQuery] Guid personId, [FromQuery] Guid groupId)
     {
         try
         {
@@ -107,12 +107,12 @@ public class PersonGroupsController : Controller
 
     //[Authorize(Roles = "Player")]
     [HttpPut]
-    public async Task<IResult> ChangePersonGroup([FromBody] PersonGroupModel newPersonGroupModel, Guid personId,Guid groupId)
+    public async Task<IResult> ChangePersonGroup([FromBody] PersonGroupModel personGroupModel)
     {
         try
         {
-            var result = await _personGroupsService.ChangePersonGroup(newPersonGroupModel,personId, groupId);
-            return result ? Results.Ok("Group Change") : Results.NotFound(personId + "and" + groupId );
+            var result = await _personGroupsService.ChangePersonGroup(personGroupModel);
+            return result ? Results.Ok("Group Change") : Results.NotFound(personGroupModel);
         }
         catch (Exception e)
         {
@@ -121,12 +121,12 @@ public class PersonGroupsController : Controller
     }
     
     //[Authorize(Roles = "Player")]
-    [HttpDelete("{personId}/{groupId}")]
-    public async Task<IResult> DeleteGroup([FromRoute] Guid personId,Guid groupId)
+    [HttpDelete]
+    public async Task<IResult> DeletePersonGroup([FromQuery] Guid personId,[FromQuery] Guid groupId)
     {
         try
         {
-            await _personGroupsService.DeleteConnection(personId, groupId);
+            await _personGroupsService.DeletePersonGroup(personId, groupId);
         }
         catch (Exception e)
         {

@@ -21,43 +21,51 @@ public class PersonGroupsService : IPersonGroupsService
         await _personGroupsRepository.Add(ConvertModel(personGroupModel));
     }
 
-    public async Task<bool> ChangePersonGroup(PersonGroupModel personGroupModel,Guid personId, Guid groupId)
+    public async Task<bool> ChangePersonGroup(PersonGroupModel personGroupModel)
     {
-        var foundGroup = await _personGroupsRepository.GetPersonGroup(personId, groupId);
+        var foundGroup = await _personGroupsRepository.Get(personGroupModel.PersonId, personGroupModel.GroupId);
         if (foundGroup == null)
             return false;
         
-        await _personGroupsRepository.Change(ConvertModel(personGroupModel), foundGroup);
+        foundGroup.GroupRole = personGroupModel.GroupRole;
+        foundGroup.JoinedAt = personGroupModel.JoinedAt;
+        await _personGroupsRepository.Change(foundGroup);
         return true;
     }
 
-    public async Task DeleteConnection(Guid personId, Guid groupId)
+    public async Task DeletePersonGroup(Guid personId, Guid groupId)
     {
-        var foundGroup = await _personGroupsRepository.GetPersonGroup(personId, groupId);
+        var foundGroup = await _personGroupsRepository.Get(personId, groupId);
         if (foundGroup == null)
             return;
 
-        await _personGroupsRepository.DeleteConnection(foundGroup);
+        await _personGroupsRepository.Delete(foundGroup);
     }
     
     public async Task<PersonGroupModel?[]> GetAllByGroupId(Guid groupId) => 
         ConvertEntities(await _personGroupsRepository.GetAllByGroupId(groupId));
     
-    public async Task<PersonGroupEntity?[]> GetAllPersonGroupByPersonId(Guid personId) => 
-        await _personGroupsRepository.GetAllPersonGroupByPersonId(personId);
+    public async Task<PersonGroupModel?[]> GetAllByPersonId(Guid personId) => 
+        ConvertEntities(await _personGroupsRepository.GetAllByPersonId(personId));
     
-    public async Task<PersonGroupEntity?> GetPersonGroup(Guid personId, Guid groupId) => 
-        await _personGroupsRepository.GetPersonGroup(personId, groupId);
+    public async Task<PersonGroupModel?> GetPersonGroup(Guid personId, Guid groupId) => 
+        ConvertEntity(await _personGroupsRepository.Get(personId, groupId));
     
-    public async Task<PersonEntity?[]> GetAllPersonByGroupId(Guid groupId) => 
-        await _personGroupsRepository.GetAllPersonByGroupId(groupId);
+    public async Task<PersonModel?[]> GetAllPersonsByGroupId(Guid groupId) => 
+        ConvertEntities(await _personGroupsRepository.GetAllPersonsByGroupId(groupId));
     
-    public async Task<GroupEntity?[]> GetAllGroupByPersonId(Guid personId) => 
-        await _personGroupsRepository.GetAllGroupByPersonId(personId);
+    public async Task<GroupModel?[]> GetAllGroupsByPersonId(Guid personId) => 
+        ConvertEntities(await _personGroupsRepository.GetAllGroupsByPersonId(personId));
     
     private PersonGroupEntity ConvertModel(PersonGroupModel model) => 
         _mapper.Map<PersonGroupEntity>(model);
     
     private PersonGroupModel?[] ConvertEntities(PersonGroupEntity?[] entities) => 
         _mapper.Map<PersonGroupModel?[]>(entities);
+    private PersonGroupModel? ConvertEntity(PersonGroupEntity? entity) => 
+        _mapper.Map<PersonGroupModel?>(entity);
+    private PersonModel?[] ConvertEntities(PersonEntity?[] entities) => 
+        _mapper.Map<PersonModel?[]>(entities);
+    private GroupModel?[] ConvertEntities(GroupEntity?[] entities) => 
+        _mapper.Map<GroupModel?[]>(entities);
 }

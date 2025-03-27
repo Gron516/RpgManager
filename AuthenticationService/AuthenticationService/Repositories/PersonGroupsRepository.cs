@@ -23,32 +23,27 @@ public class PersonGroupsRepository : IPersonGroupsRepository
     public async Task<PersonGroupEntity?[]> GetAllByGroupId(Guid groupId) => 
         await _context.PersonGroups.Where(g => g.GroupId == groupId).ToArrayAsync();
     
-    public async Task<PersonGroupEntity?[]> GetAllPersonGroupByPersonId(Guid personId) => 
+    public async Task<PersonGroupEntity?[]> GetAllByPersonId(Guid personId) => 
         await _context.PersonGroups.Where(g => g.PersonId == personId).ToArrayAsync();
     
-    public async Task<PersonGroupEntity?> GetPersonGroup(Guid personId, Guid groupId) => 
+    public async Task<PersonGroupEntity?> Get(Guid personId, Guid groupId) => 
         await _context.PersonGroups.FirstOrDefaultAsync(g => g.PersonId == personId && g.GroupId == groupId);
-
-    public async Task Change(PersonGroupEntity newPersonGroup , PersonGroupEntity oldPersonGroup)
+    
+    public async Task Change(PersonGroupEntity personGroup)
     {
-        oldPersonGroup.PersonId = newPersonGroup.PersonId; //?? newPersonGroup.PersonId;
-        oldPersonGroup.GroupId = newPersonGroup.GroupId; //?? newPersonGroup.GroupId;
-        oldPersonGroup.GroupRole = newPersonGroup.GroupRole; //?? newPersonGroup.GroupRole;
+        _context.PersonGroups.Update(personGroup);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteConnection(PersonGroupEntity personGroup)
+    public async Task Delete(PersonGroupEntity personGroup)
     {
         _context.PersonGroups.Remove(personGroup);
         await _context.SaveChangesAsync();
     }
     
-    public async Task<PersonEntity?[]> GetAllPersonByGroupId(Guid groupId)
-    {
-        return await _context.PersonGroups.Where(pg => pg.GroupId == groupId).Select(pg => pg.Person).ToArrayAsync();
-    }
-    public async Task<GroupEntity?[]> GetAllGroupByPersonId(Guid personId)
-    {
-        return await _context.PersonGroups.Where(pg => pg.PersonId == personId).Select(pg => pg.Group).ToArrayAsync();
-    }
+    public async Task<PersonEntity?[]> GetAllPersonsByGroupId(Guid groupId) => 
+        await _context.PersonGroups.Where(pg => pg.GroupId == groupId).Select(pg => pg.Person).ToArrayAsync();
+
+    public async Task<GroupEntity?[]> GetAllGroupsByPersonId(Guid personId) => 
+        await _context.PersonGroups.Where(pg => pg.PersonId == personId).Select(pg => pg.Group).ToArrayAsync();
 }
