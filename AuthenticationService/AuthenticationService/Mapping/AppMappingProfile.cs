@@ -17,5 +17,6 @@ public class AppMappingProfile : Profile
         CreateMap<PersonGroupModel, PersonGroupEntity>();
         CreateMap<GroupEntity?, GroupModel?>();
         CreateMap<PersonGroupEntity?, PersonGroupModel?>();
+        CreateMap<PersonEntity?, PersonModel? >();
     }
 }
